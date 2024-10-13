@@ -1,5 +1,6 @@
 using App;
 using App.Middleware;
+using Database;
 using Domain.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,11 +17,25 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors(ApplicationConstants.DevelopmentCorsPolicyName);
 }
+else
+{
+    // "Genius may have its limitations, but stupidity is not thus handicapped." - Elbert Hubbard
+    await app.Services.EnsureLatestDatabaseMigrationsPushed();
+}
 
 app.UseAuthentication();
 
 app.UseAuthorization();
 
-var apiGroup = app.MapGroup("api/v1").RequireAuthorization();
+app.UseStaticFiles(StaticFileOptionsFactory.Create());
+
+app.MapFallbackToFile("index.html");
+
+app.RegisterEndpoints();
+
+app.MapGet("health", () => Results.Ok());
+
+app.Services.GetRequiredService<ILogger<Program>>()
+    .LogInformation("{ApplicationName} service has started", ApplicationConstants.ApplicationName);
 
 app.Run();

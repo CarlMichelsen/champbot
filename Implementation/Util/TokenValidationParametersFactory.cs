@@ -20,5 +20,4 @@ public static class TokenValidationParametersFactory
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Secret)),
         };
     }
-    
 }

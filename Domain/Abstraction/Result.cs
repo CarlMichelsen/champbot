@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace Domain.Abstraction;
 
-public class Result
+public class Result : IResultInformation
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="Result"/> class.
