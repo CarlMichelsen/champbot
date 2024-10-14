@@ -9,7 +9,13 @@
     let accountPageState = $state<AccountPageState|null>(null);
     let selectedLogins = $state<string[]>([]);
 
-    const dateOptions: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+    const dateTimeOptions: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
     const client = new SessionClient();
     const loginSelected = (loginRecord: LoginRecord) => {
         if (!!selectedLogins.find(sl => sl === loginRecord.loginId)) {
@@ -45,9 +51,10 @@
 
     <ol class="space-y-6">
         {#each accountPageState.loginRecords as loginRecord}
-            <li class="outline outline-1 outline-black rounded-sm p-1 grid grid-cols-[5rem_auto_15rem_5rem]">
+            <li class="outline outline-1 outline-black rounded-sm p-1 grid grid-cols-[5rem_auto_18rem_10rem]">
                 <div class="grid grid-row-2">
                     <div class="grid grid-cols-[1rem_auto] ml-1">
+                        <label for={"login-checkbox-"+loginRecord.loginId} class="sr-only">Select login</label>
                         <input
                             onclick={() => loginSelected(loginRecord)}
                             checked={!!selectedLogins.find(sl => sl == loginRecord.loginId)}
@@ -61,27 +68,27 @@
                 </div>
                 
                 <p>{loginRecord.userAgent}</p>
-                <p>Created {(new Date(loginRecord.createdUtc)).toLocaleDateString(undefined, dateOptions)}</p>
+                <p>Created {(new Date(loginRecord.createdUtc)).toLocaleDateString(undefined, dateTimeOptions)}</p>
                 <p>{loginRecord.ip}</p>
 
                 <h2 class="ml-8 col-span-4 underline">Refresh records</h2>
 
                 <ol class="ml-8 col-span-4 space-y-3">
                     {#each loginRecord.refreshRecords as refreshRecord}
-                        <li class="grid grid-cols-[5rem_auto_15rem_5rem]">
+                        <li class="grid grid-cols-[5rem_auto_18rem_10rem]">
                             <p>|{refreshRecord.refreshId}|</p>
                             <p>{refreshRecord.userAgent}</p>
-                            <p>{refreshRecord.expiresUtc}</p>
+                            <p>Expires {(new Date(refreshRecord.expiresUtc)).toLocaleDateString(undefined, dateTimeOptions)}</p>
                             <p>{refreshRecord.ip}</p>
 
                             <h2 class="ml-8 col-span-4 underline">Access records</h2>
 
                             <ol class="ml-8 col-span-4">
                                 {#each refreshRecord.accessRecords as accessRecord}
-                                    <li class="grid grid-cols-[5rem_auto_15rem_5rem]">
+                                    <li class="grid grid-cols-[5rem_auto_18rem_10rem]">
                                         <p>|{accessRecord.accessId}|</p>
                                         <p>{accessRecord.userAgent}</p>
-                                        <p>{accessRecord.expiresUtc}</p>
+                                        <p>Expires {(new Date(accessRecord.expiresUtc)).toLocaleDateString(undefined, dateTimeOptions)}</p>
                                         <p>{accessRecord.ip}</p>
                                     </li>
                                 {/each}

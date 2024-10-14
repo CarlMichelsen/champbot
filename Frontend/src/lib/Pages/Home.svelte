@@ -4,6 +4,7 @@
     const userStore = getUserStore();
 </script>
 
-<p>Home</p>
-
-<pre>{JSON.stringify(userStore.user, null, 2)}</pre>
+<p>User data</p>
+<div class="dark:bg-black bg-white">
+    <pre>{JSON.stringify(userStore.user, null, 2)}</pre>
+</div>
