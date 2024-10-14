@@ -6,4 +6,4 @@ export const hostUrl = (): string => isDevelopment()
 
 export const identityUrl = (): string => isDevelopment()
     ? "http://localhost:5791"
-    : "http://identity.survivethething.com";
+    : "https://identity.survivethething.com";
