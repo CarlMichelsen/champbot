@@ -90,7 +90,7 @@ public static class Dependencies
                     configurePolicy =>
                     {
                         configurePolicy
-                            .WithOrigins(ApplicationConstants.DevelopmentFrontendUrl)
+                            .WithOrigins(ApplicationConstants.DevelopmentCorsUrl)
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials();
