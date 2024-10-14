@@ -1,52 +1,60 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import Root from "./lib/Root.svelte";
-    import type { AuthenticatedUser } from "./model/user/authenticatedUser";
-    import { UserClient } from "./util/clients/userClient";
+  import { UserClient } from "./util/clients/userClient";
+  import { getUserStore, initiateUserStore } from "./store/userStore.svelte";
+  import Home from "./lib/Pages/Home.svelte";
+  import Account from "./lib/Pages/Account.svelte";
+  import LoggedOut from "./lib/Pages/LoggedOut.svelte";
 
   type AppProps = {
     url: string;
   };
 
-  type LoginState = {
-    user?: AuthenticatedUser,
-    state: "pending"|"loggedIn"|"loggedOut"
-  };
-
-  let loginState = $state<LoginState>({ state: "pending" });
   let { url }: AppProps = $props();
 
+  initiateUserStore();
+
+  const userStore = getUserStore();
   const userClient = new UserClient();
 
   const attemptLogin = async () => {
     const userResponse = await userClient.getUser();
     if (userResponse.ok) {
-      loginState = { state: "loggedIn", user: userResponse.value };
+      userStore.login(userResponse.value!);
     } else {
       const refreshResponse = await userClient.refresh();
-      if (refreshResponse.ok)
-      {
+      if (refreshResponse.ok) {
         const reUserResponse = await userClient.getUser();
         if (reUserResponse.ok) {
-          loginState = { state: "loggedIn", user: undefined };
+          userStore.login(reUserResponse.value!);
         }
       }
 
-      loginState = { state: "loggedOut", user: undefined };
+      userStore.logout();
     }
   }
 
   attemptLogin();
 </script>
 
-<Root>
-  <Router {url}>
-    <Route path="/">
-      <p>home</p>
-    </Route>
 
-    <Route path="/idp">
-      <p>idp</p>
-    </Route>
-  </Router>
+<Root>
+  {#if userStore.state === "loggedIn"}
+    <Router {url}>
+      <Route path="/">
+        <Home />
+      </Route>
+
+      <Route path="/account">
+        <Account />
+      </Route>
+    </Router>
+  {:else if userStore.state === "loggedOut"}
+    <LoggedOut />
+  {:else if userStore.state === "pending"}
+    <p>pending...</p>
+  {:else}
+    <p>unknown state</p>
+  {/if}
 </Root>

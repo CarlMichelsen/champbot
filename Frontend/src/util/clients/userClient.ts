@@ -25,6 +25,6 @@ export class UserClient extends BaseClient
         const provider = import.meta.env.VITE_APP_ENV === 'development'
             ? "development"
             : "discord";
-        return `${this.host}/api/v1/login/${provider}`;
+        return `${this.host}/api/v1/login/${provider}?dest=${location.href}`;
     }
 }
