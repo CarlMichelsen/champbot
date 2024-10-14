@@ -33,7 +33,7 @@
         {/if}
     </header>
 
-    <main class="overflow-x-scroll">
+    <main class="overflow-x-scroll hide-scrollbar">
         <slot></slot>
     </main>
 </div>
