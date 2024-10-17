@@ -20,7 +20,8 @@ if (app.Environment.IsDevelopment())
 else
 {
     // "Genius may have its limitations, but stupidity is not thus handicapped." - Elbert Hubbard
-    await app.Services.EnsureLatestDatabaseMigrationsPushed();
+    await app.Services
+        .EnsureLatestDatabaseMigrationsPushed();
 }
 
 app.UseAuthentication();
@@ -36,6 +37,8 @@ app.RegisterEndpoints();
 app.MapGet("health", () => Results.Ok());
 
 app.Services.GetRequiredService<ILogger<Program>>()
-    .LogInformation("{ApplicationName} service has started", ApplicationConstants.ApplicationName);
+    .LogInformation(
+        "{ApplicationName} service has started",
+        ApplicationConstants.ApplicationName);
 
 app.Run();

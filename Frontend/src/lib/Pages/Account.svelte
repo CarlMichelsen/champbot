@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { LoginRecord } from "../../model/session/loginRecord";
     import { SessionClient } from "../../util/clients/sessionClient";
+    import { UserClient } from "../../util/clients/userClient";
 
     type AccountPageState = {
         loginRecords: LoginRecord[]
@@ -40,6 +41,14 @@
                     !invalidateSessionsResult.value!.find(srv => srv.loginId === lr.loginId))!,
             };
             selectedLogins = [];
+        }
+    }
+
+    const manualRefresh = async () => {
+        const userClient = new UserClient();
+        const refreshRes = await userClient.refresh();
+        if (refreshRes.ok) {
+            await getAccountPageDate();
         }
     }
 
@@ -108,6 +117,9 @@
             Invalidate login{selectedLogins.length > 1 ? "s" : ""}
         </button>
     {/if}
+
+    <br>
+    <button class="hover:underline" onclick={() => manualRefresh()}>Manual refresh</button>
 {:else}
     <p>pending...</p>
 {/if}

@@ -4,10 +4,12 @@ using Domain.Configuration;
 using Domain.Configuration.Options;
 using Implementation.Accessor;
 using Implementation.Handler;
+using Implementation.Repository;
 using Implementation.Service;
 using Implementation.Util;
 using Interface.Accessor;
 using Interface.Handler;
+using Interface.Repository;
 using Interface.Service;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -37,12 +39,20 @@ public static class Dependencies
         
         // Handler
         builder.Services
-            .AddScoped<IUserDataHandler, UserDataHandler>();
+            .AddScoped<IEventHandler, Implementation.Handler.EventHandler>()
+            .AddScoped<IReminderHandler, ReminderHandler>();
 
         // Service
         builder.Services
             .AddScoped<IResultErrorLogService, ResultErrorLogService>()
-            .AddScoped<IUserDataService, UserDataService>();
+            .AddScoped<IUserDataService, UserDataService>()
+            .AddScoped<IEventService, EventService>()
+            .AddScoped<IReminderService, ReminderService>();
+
+        // Repository
+        builder.Services
+            .AddScoped<IEventRepository, EventRepository>()
+            .AddScoped<IReminderRepository, ReminderRepository>();
 
         // Http
         builder.Services

@@ -6,6 +6,7 @@
   import Home from "./lib/Pages/Home.svelte";
   import Account from "./lib/Pages/Account.svelte";
   import LoggedOut from "./lib/Pages/LoggedOut.svelte";
+    import Reminders from "./lib/Pages/Reminders.svelte";
 
   type AppProps = {
     url: string;
@@ -44,6 +45,10 @@
     <Router {url}>
       <Route path="/">
         <Home />
+      </Route>
+
+      <Route path="/reminders">
+        <Reminders />
       </Route>
 
       <Route path="/account">

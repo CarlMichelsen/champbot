@@ -11,7 +11,9 @@ public static class EndpointExtensions
         var apiGroup = app
             .MapGroup("api/v1")
             .RequireAuthorization();
+        
+        apiGroup.RegisterEventEndpoints();
 
-        apiGroup.RegisterUserDataEndpoints();
+        apiGroup.RegisterReminderEndpoints();
     }
 }

@@ -1,5 +1,6 @@
 using Domain.Abstraction;
 using Domain.Configuration;
+using Domain.Dto;
 using Interface.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -18,7 +19,6 @@ public class ResultErrorLogService(
         }
 
         var error = result.Error!;
-
         var traceId = this.GetTraceId() ?? Guid.NewGuid().ToString();
         if (error.InnerException is null)
         {
@@ -39,6 +39,12 @@ public class ResultErrorLogService(
             error.Description);
             
         return;
+    }
+
+    public ServiceResponse<T> ToServiceResponse<T>(ResultError error)
+    {
+        var errString = Enum.GetName(error.Type) ?? "unknown";
+        return new ServiceResponse<T>(errString);
     }
 
     private string? GetTraceId()

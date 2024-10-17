@@ -15,17 +15,24 @@
 </script>
 
 <div class="container mx-auto grid grid-rows-[3rem_auto] gap-4 min-h-screen">
-    <header class="grid grid-cols-[auto_6rem]">
+    <header class="grid grid-cols-[auto_8rem]">
         {#if userStore.state === "loggedIn"}
         <nav class="pt-2.5 space-x-8">
             <a class="hover:underline" use:link href="/">Home</a>
+            <a class="hover:underline" use:link href="reminders">Reminders</a>
             <a class="hover:underline" use:link href="account">Account</a>
         </nav>
 
-        <div>
-            <button
-                onclick={() => logout()}
-                class="block mx-auto mt-2.5 hover:underline">Logout</button>
+        <div class="grid grid-cols-[auto_3rem]">
+            <div class="grid grid-rows-2">
+                <p>{userStore.user?.username}</p>
+
+                <button
+                    onclick={() => logout()}
+                    class="block mx-auto hover:underline text-xs px-2">Logout</button>
+            </div>
+
+            <img src={userStore.user?.avatarUrl} alt="profile">
         </div>
         {:else}
             <div></div>

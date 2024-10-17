@@ -15,11 +15,16 @@ public class DatabaseContext(
 {
     private const string SchemaName = "champbot";
     
-    public DbSet<BirthdayEntity> Birthday { get; init; }
+    public DbSet<EventEntity> Event { get; init; }
+
+    public DbSet<ReminderEntity> Reminder { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.HasDefaultSchema(SchemaName);
+
+        EventEntity.OnModelCreating(modelBuilder.Entity<EventEntity>());
+        ReminderEntity.OnModelCreating(modelBuilder.Entity<ReminderEntity>());
     }
 }
