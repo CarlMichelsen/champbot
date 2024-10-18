@@ -4,4 +4,4 @@ public record EditReminderDto(
     long EventId,
     long ReminderId,
     string? ReminderNote,
-    TimeSpan? TimeBeforeEvent);
+    long MinutesBeforeEvent);

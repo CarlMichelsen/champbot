@@ -1,12 +1,13 @@
 <script lang="ts">
   import { Router, Route } from "svelte-routing";
   import Root from "./lib/Root.svelte";
-  import { UserClient } from "./util/clients/userClient";
   import { getUserStore, initiateUserStore } from "./store/userStore.svelte";
   import Home from "./lib/Pages/Home.svelte";
   import Account from "./lib/Pages/Account.svelte";
   import LoggedOut from "./lib/Pages/LoggedOut.svelte";
-    import Reminders from "./lib/Pages/Reminders.svelte";
+  import Events from "./lib/Pages/Events.svelte";
+    import { UserAccessor } from "./util/userAccessor";
+    import { initiateEventStore } from "./store/eventStore.svelte";
 
   type AppProps = {
     url: string;
@@ -15,20 +16,21 @@
   let { url }: AppProps = $props();
 
   initiateUserStore();
+  initiateEventStore();
 
   const userStore = getUserStore();
-  const userClient = new UserClient();
 
   const attemptLogin = async () => {
-    const userResponse = await userClient.getUser();
+    const userResponse = await UserAccessor.getUser();
     if (userResponse.ok) {
       userStore.login(userResponse.value!);
     } else {
-      const refreshResponse = await userClient.refresh();
+      const refreshResponse = await UserAccessor.refresh();
       if (refreshResponse.ok) {
-        const reUserResponse = await userClient.getUser();
-        if (reUserResponse.ok) {
-          userStore.login(reUserResponse.value!);
+        const secondUserResponse = await UserAccessor.getUser();
+        if (secondUserResponse.ok) {
+          userStore.login(secondUserResponse.value!);
+          return;
         }
       }
 
@@ -47,8 +49,8 @@
         <Home />
       </Route>
 
-      <Route path="/reminders">
-        <Reminders />
+      <Route path="/events">
+        <Events />
       </Route>
 
       <Route path="/account">

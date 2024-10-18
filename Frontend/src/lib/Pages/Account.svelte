@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { LoginRecord } from "../../model/session/loginRecord";
     import { SessionClient } from "../../util/clients/sessionClient";
-    import { UserClient } from "../../util/clients/userClient";
+    import { UserAccessor } from "../../util/userAccessor";
 
     type AccountPageState = {
         loginRecords: LoginRecord[]
@@ -45,8 +45,7 @@
     }
 
     const manualRefresh = async () => {
-        const userClient = new UserClient();
-        const refreshRes = await userClient.refresh();
+        const refreshRes = await UserAccessor.refresh();
         if (refreshRes.ok) {
             await getAccountPageDate();
         }

@@ -4,6 +4,6 @@ public record ReminderDto(
     long Id,
     long EventId,
     string? ReminderNote,
-    TimeSpan TimeBeforeEvent,
+    long MinutesBeforeEvent,
     bool Reminded,
     DateTime CreatedUtc);

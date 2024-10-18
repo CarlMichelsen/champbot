@@ -47,6 +47,7 @@ public class EventRepository(
         try
         {
             var eventToEdit = await databaseContext.Event
+                .Include(e => e.Reminders)
                 .FirstOrDefaultAsync(e => e.UserId == userId && e.Id == eventId);
 
             if (eventToEdit is null)

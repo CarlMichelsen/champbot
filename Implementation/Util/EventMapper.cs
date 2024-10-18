@@ -18,12 +18,13 @@ public static class EventMapper
             if (mapError)
             {
                 return new ResultError(
-                    ErrorType.Exception,
-                    "map error");
+                    ErrorType.MapError,
+                    "reminder list-map exception");
             }
 
             return new EventDto(
                 Id: eventEntity.Id,
+                CreatorId: eventEntity.UserId,
                 EventName: eventEntity.EventName,
                 EventTimeUtc: eventEntity.EventTimeUtc,
                 Reminders: reminderResults.Select(r => r.Unwrap()).ToList(),
@@ -33,7 +34,7 @@ public static class EventMapper
         {
             return new ResultError(
                 ErrorType.Exception,
-                "map error",
+                "event map exception",
                 e);
         }
     }
@@ -46,7 +47,7 @@ public static class EventMapper
                 Id: reminderEntity.Id,
                 EventId: reminderEntity.EventId,
                 ReminderNote: reminderEntity.ReminderNote,
-                TimeBeforeEvent: reminderEntity.TimeBeforeEvent,
+                MinutesBeforeEvent: (long)reminderEntity.TimeBeforeEvent.TotalMinutes,
                 Reminded: reminderEntity.Reminded,
                 CreatedUtc: reminderEntity.CreatedUtc);
         }
@@ -54,7 +55,7 @@ public static class EventMapper
         {
             return new ResultError(
                 ErrorType.Exception,
-                "map error",
+                "reminder map exception",
                 e);
         }
     }

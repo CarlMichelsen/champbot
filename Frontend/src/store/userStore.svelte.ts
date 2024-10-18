@@ -3,16 +3,16 @@ import type { AuthenticatedUser } from "../model/user/authenticatedUser"
 
 export type LoginState = "pending"|"loggedIn"|"loggedOut";
 
-export type CreateUserStoreState = {
+export type UserStoreState = {
     readonly user?: AuthenticatedUser,
     readonly state: LoginState,
     login: (newUser: AuthenticatedUser) => void;
     logout: () => void;
 }
 
-const createUserStore = (): CreateUserStoreState => {
+const createUserStore = (): UserStoreState => {
     let user = $state<AuthenticatedUser|undefined>(undefined);
-    let state = $state<CreateUserStoreState["state"]>("pending");
+    let state = $state<UserStoreState["state"]>("pending");
 
     return {
         login(newUser: AuthenticatedUser) {
@@ -35,7 +35,7 @@ const createUserStore = (): CreateUserStoreState => {
 const STORE_CTX = 'USER_CTX';
 
 export const getUserStore = () => {
-    return getContext<CreateUserStoreState>(STORE_CTX);
+    return getContext<UserStoreState>(STORE_CTX);
 }
 
 export const initiateUserStore = () => {

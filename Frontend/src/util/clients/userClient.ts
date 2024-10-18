@@ -9,15 +9,10 @@ export class UserClient extends BaseClient
 
     protected host: string = identityUrl();
 
-    public async getUser() : Promise<ServiceResponse<AuthenticatedUser>> {
+    public async getUser() {
         return await this.request<AuthenticatedUser>("GET", this.userPath);
     }
-
-    public async refresh() : Promise<ServiceResponse<void>> {
-        return await this.request<void>("PUT", this.userPath);
-    }
-
-    public async logout() : Promise<ServiceResponse<void>> {
+    public async logout() {
         return await this.request<void>("DELETE", this.userPath);
     }
 

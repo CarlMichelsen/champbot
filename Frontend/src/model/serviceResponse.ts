@@ -12,3 +12,12 @@ type NotOkServiceResponse = {
 }
 
 export type ServiceResponse<T> = OkServiceResponse<T> | NotOkServiceResponse;
+
+export const errorResponse = <T>(): ServiceResponse<T> =>
+{
+    return {
+        ok: false,
+        errors: ["error"],
+        nowUtc: (new Date()).toString(),
+    }
+}

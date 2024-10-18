@@ -23,7 +23,7 @@ public class ReminderService(
             userResult.Unwrap().User.Id,
             createReminder.EventId,
             createReminder.ReminderNote,
-            createReminder.TimeBeforeEvent);
+            TimeSpan.FromMinutes(createReminder.MinutesBeforeEvent));
         
         if (addResult.IsError)
         {
@@ -54,7 +54,7 @@ public class ReminderService(
             editReminder.EventId,
             editReminder.ReminderId,
             editReminder.ReminderNote,
-            editReminder.TimeBeforeEvent);
+            TimeSpan.FromMinutes(editReminder.MinutesBeforeEvent));
         
         if (editResult.IsError)
         {

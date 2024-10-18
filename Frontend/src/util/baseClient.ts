@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { ServiceResponse } from "../model/serviceResponse";
+import { errorResponse, type ServiceResponse } from "../model/serviceResponse";
+import { UserAccessor } from './userAccessor';
 
 export type Method = "GET"
     | "HEAD"
@@ -22,7 +23,26 @@ export abstract class BaseClient
         headers?: { [key: string]: string },
         traceId?: string)
     {
-        return await this.internalRequest<T>(method, path, body, headers, traceId);
+        try {
+            return await this.internalRequest<T>(method, path, body, headers, traceId);
+        } catch (error) {
+            const userRes = await UserAccessor.getUser();
+            if (userRes.ok) {
+                // User is logged in so this must be a genuine error.
+                return errorResponse<T>();
+            }
+
+            const refreshRes = await UserAccessor.refresh();
+            if (!refreshRes.ok) {
+                return errorResponse<T>();
+            }
+        }
+        
+        try {
+            return await this.internalRequest<T>(method, path, body, headers, traceId);
+        } catch (error) {
+            return errorResponse<T>();
+        }
     }
 
     private async internalRequest<T>(

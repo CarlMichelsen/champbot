@@ -52,7 +52,7 @@ public class EventService(
             userResult.Unwrap().User.Id,
             editEvent.EventId,
             editEvent.EventTimeUtc,
-            editEvent.ReminderNote);
+            editEvent.Name);
         
         if (editResult.IsError)
         {

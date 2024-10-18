@@ -1,5 +1,5 @@
 export type EditEventDto = {
-    eventId: string;
+    eventId: number;
     eventTimeUtc?: Date;
-    reminderNote?: string;
+    name?: string;
 }
