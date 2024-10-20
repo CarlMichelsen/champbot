@@ -41,6 +41,11 @@ public class DiscordBotBackgroundService(
             
             await Task.Delay(Timeout.Infinite, stoppingToken);
         }
+        catch (TaskCanceledException)
+        {
+            await this.socketClient.DisposeAsync();
+            logger.LogInformation("Discord bot was stopped safely");
+        }
         catch (System.Exception e)
         {
             logger.LogCritical(e, "Discord bot failed to start");
