@@ -2,7 +2,9 @@
     import type { DiscordGuildDto } from "../../model/discord/discordGuildDto";
     import type { DiscordTextChannelDto } from "../../model/discord/discordTextChannelDto";
     import { DiscordClient } from "../../util/clients/discordClient";
-    import DiscordGuildCard from "../Components/Discord/DiscordGuildCard.svelte";
+
+    let sending = $state<boolean>(false);
+    let area = $state<HTMLTextAreaElement>();
 
     let selectedGuild = $state<DiscordGuildDto|null>(null);
     let selectedChannel = $state<DiscordTextChannelDto|null>(null);
@@ -25,6 +27,7 @@
     }
 
     const sendMessage = async () => {
+        sending = true;
         var res = await client.sendMessage({
             guildId: selectedGuild!.guildId,
             textChannelId: selectedChannel!.textChannelId,
@@ -34,6 +37,9 @@
         if (res.ok) {
             discordMessage = "";
         }
+
+        sending = false;
+        setTimeout(() => area?.focus(), 0);
     }
 
     attemptGetGuilds();
@@ -93,8 +99,10 @@
         <br>
 
         <textarea
+            bind:this={area}
             bind:value={discordMessage}
-            class="dark:bg-neutral-700 resize-none focus:outline-none p-1 w-96 min-h-32"
+            disabled={sending}
+            class="dark:bg-neutral-700 resize-none focus:outline-none p-1 w-96 min-h-32 disabled:bg-yellow-900"
             name="message-area"
             id="message-area"
             onkeydown={async (e) => {
