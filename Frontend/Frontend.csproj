@@ -12,6 +12,7 @@
 
     <Target Name="PreBuild" BeforeTargets="PreBuildEvent" Condition="'$(Configuration)'=='Debug' AND '$(IsRiderBuild)'=='false'">
         <Exec Command="npm install" />
+        <Exec Command="npm run check" />
         <Exec Command="npm run build" />
 
         <ItemGroup>

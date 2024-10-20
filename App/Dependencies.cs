@@ -29,7 +29,7 @@ public static class Dependencies
         builder.Configuration.AddJsonFile(
             "secrets.json",
             optional: builder.Environment.IsDevelopment(),
-            reloadOnChange: true);
+            reloadOnChange: false);
         
         builder.Services
             .Configure<DiscordBotOptions>(builder.Configuration.GetSection(DiscordBotOptions.SectionName));

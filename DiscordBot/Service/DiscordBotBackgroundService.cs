@@ -1,4 +1,5 @@
-﻿using Discord;
+﻿using System.Reactive.Linq;
+using Discord;
 using Discord.WebSocket;
 using DiscordBot.Accessor;
 using DiscordBot.Configuration;
@@ -19,24 +20,31 @@ public class DiscordBotBackgroundService(
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        // Make discord bot available to IDiscordSocketClientAccessor
-        ((DiscordSocketClientAccessor)discordSocketClientAccessor)
-            .SetDiscordSocketClient(this.socketClient);
+        try
+        {
+            // Make discord bot available to IDiscordSocketClientAccessor
+            ((DiscordSocketClientAccessor)discordSocketClientAccessor)
+                .SetDiscordSocketClient(this.socketClient);
 
-        this.socketClient.Log += this.LogAsync;
+            this.socketClient.Log += this.LogAsync;
 
-        await this.socketClient.LoginAsync(
-            TokenType.Bot,
-            discordBotOptions.Value.Token);
+            await this.socketClient.LoginAsync(
+                TokenType.Bot,
+                discordBotOptions.Value.Token);
 
-        await this.socketClient.StartAsync();
+            await this.socketClient.StartAsync();
 
-        await Task.Delay(TimeSpan.FromSeconds(2));
-        logger.LogInformation(
-            "Client is aware of the following guild IDs: {Guilds}",
-            string.Join(", ", this.socketClient.Guilds.Select(g => g.Id)));
-        
-        await Task.Delay(Timeout.Infinite, stoppingToken);
+            await Task.Delay(TimeSpan.FromSeconds(2), stoppingToken);
+            logger.LogInformation(
+                "DiscordBot is aware of the following guilds:\n{Guilds}",
+                string.Join('\n', this.socketClient.Guilds.Select(g => $"\t{g.Name}:{g.Id}")));
+            
+            await Task.Delay(Timeout.Infinite, stoppingToken);
+        }
+        catch (System.Exception e)
+        {
+            logger.LogCritical(e, "Discord bot failed to start");
+        }
     }
 
     private Task LogAsync(LogMessage log)

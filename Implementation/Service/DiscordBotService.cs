@@ -61,7 +61,8 @@ public class DiscordBotService(
         try
         {
             var user = userContextResult.Unwrap().User;
-            var guild = clientAccessor.Client.GetGuild(ulong.Parse(sendDiscordMessage.GuildId));
+            var guild = clientAccessor.Client.Guilds
+                .FirstOrDefault(g => g.Id == ulong.Parse(sendDiscordMessage.GuildId));
             if (guild is null)
             {
                 return new ServiceResponse("Guild not found");
