@@ -17,10 +17,8 @@
     const attemptGetGuilds = async () => {
         const gs = await client.getGuilds();
         if (gs.ok && gs.value) {
-            if (gs.value.length === 1) {
-                selectedGuild = gs.value[0];
-                selectedChannel = selectedGuild.textChannels[0] ?? null;
-            }
+            selectedGuild = gs.value[0] ?? null;
+            selectedChannel = selectedGuild.textChannels[0] ?? null;
 
             guilds = gs.value;
         }
