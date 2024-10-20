@@ -1,3 +1,4 @@
+using Domain.Abstraction;
 using Domain.Dto;
 using Domain.Dto.Event;
 using Implementation.Util;
@@ -11,7 +12,7 @@ public class ReminderService(
     IUserContextAccessor userContextAccessor,
     IReminderRepository reminderRepository) : IReminderService
 {
-    public async Task<ServiceResponse<ReminderDto>> AddReminder(CreateReminderDto createReminder)
+    public async Task<Result<ServiceResponse<ReminderDto>>> AddReminder(CreateReminderDto createReminder)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -27,21 +28,19 @@ public class ReminderService(
         
         if (addResult.IsError)
         {
-            var err = Enum.GetName(addResult.Error!.Type)!;
-            return new ServiceResponse<ReminderDto>(err);
+            return addResult.Error!;
         }
 
         var mappedResult = EventMapper.MapReminder(addResult.Unwrap());
         if (mappedResult.IsError)
         {
-            var err = Enum.GetName(mappedResult.Error!.Type)!;
-            return new ServiceResponse<ReminderDto>(err);
+            return mappedResult.Error!;
         }
 
         return new ServiceResponse<ReminderDto>(mappedResult.Unwrap());
     }
 
-    public async Task<ServiceResponse<ReminderDto>> EditReminder(EditReminderDto editReminder)
+    public async Task<Result<ServiceResponse<ReminderDto>>> EditReminder(EditReminderDto editReminder)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -58,21 +57,19 @@ public class ReminderService(
         
         if (editResult.IsError)
         {
-            var err = Enum.GetName(editResult.Error!.Type)!;
-            return new ServiceResponse<ReminderDto>(err);
+            return editResult.Error!;
         }
 
         var mappedResult = EventMapper.MapReminder(editResult.Unwrap());
         if (mappedResult.IsError)
         {
-            var err = Enum.GetName(mappedResult.Error!.Type)!;
-            return new ServiceResponse<ReminderDto>(err);
+            return mappedResult.Error!;
         }
 
         return new ServiceResponse<ReminderDto>(mappedResult.Unwrap());
     }
 
-    public async Task<ServiceResponse> RemoveReminder(long eventId, long reminderId)
+    public async Task<Result<ServiceResponse>> RemoveReminder(long eventId, long reminderId)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -87,8 +84,7 @@ public class ReminderService(
         
         if (removeResult.IsError)
         {
-            var err = Enum.GetName(removeResult.Error!.Type)!;
-            return new ServiceResponse<ReminderDto>(err);
+            return removeResult.Error!;
         }
 
         return new ServiceResponse();

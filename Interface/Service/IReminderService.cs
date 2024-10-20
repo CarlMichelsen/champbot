@@ -1,3 +1,4 @@
+using Domain.Abstraction;
 using Domain.Dto;
 using Domain.Dto.Event;
 
@@ -5,9 +6,9 @@ namespace Interface.Service;
 
 public interface IReminderService
 {
-    Task<ServiceResponse<ReminderDto>> AddReminder(CreateReminderDto createReminder);
+    Task<Result<ServiceResponse<ReminderDto>>> AddReminder(CreateReminderDto createReminder);
 
-    Task<ServiceResponse> RemoveReminder(long eventId, long reminderId);
+    Task<Result<ServiceResponse>> RemoveReminder(long eventId, long reminderId);
 
-    Task<ServiceResponse<ReminderDto>> EditReminder(EditReminderDto editReminder);
+    Task<Result<ServiceResponse<ReminderDto>>> EditReminder(EditReminderDto editReminder);
 }

@@ -6,23 +6,42 @@ using Microsoft.AspNetCore.Http;
 namespace Implementation.Handler;
 
 public class ReminderHandler(
+    IResultErrorLogService errorLog,
     IReminderService reminderService) : IReminderHandler
 {
     public async Task<IResult> AddReminder(CreateReminderDto createReminder)
     {
         var res = await reminderService.AddReminder(createReminder);
-        return Results.Ok(res);
+        if (res.IsError)
+        {
+            errorLog.Log(res);
+            return Results.StatusCode(500);
+        }
+
+        return Results.Ok(res.Unwrap());
     }
 
     public async Task<IResult> EditReminder(EditReminderDto editReminder)
     {
         var res = await reminderService.EditReminder(editReminder);
-        return Results.Ok(res);
+        if (res.IsError)
+        {
+            errorLog.Log(res);
+            return Results.StatusCode(500);
+        }
+
+        return Results.Ok(res.Unwrap());
     }
 
     public async Task<IResult> RemoveReminder(long eventId, long reminderId)
     {
         var res = await reminderService.RemoveReminder(eventId, reminderId);
-        return Results.Ok(res);
+        if (res.IsError)
+        {
+            errorLog.Log(res);
+            return Results.StatusCode(500);
+        }
+
+        return Results.Ok(res.Unwrap());
     }
 }

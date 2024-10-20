@@ -1,3 +1,4 @@
+using Domain.Abstraction;
 using Domain.Dto;
 using Domain.Dto.Event;
 using Implementation.Util;
@@ -11,7 +12,7 @@ public class EventService(
     IUserContextAccessor userContextAccessor,
     IEventRepository eventRepository) : IEventService
 {
-    public async Task<ServiceResponse<EventDto>> AddEvent(CreateEventDto createEvent)
+    public async Task<Result<ServiceResponse<EventDto>>> AddEvent(CreateEventDto createEvent)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -26,21 +27,19 @@ public class EventService(
 
         if (addResult.IsError)
         {
-            var err = Enum.GetName(addResult.Error!.Type)!;
-            return new ServiceResponse<EventDto>(err);
+            return addResult.Error!;
         }
 
         var mappedResult = EventMapper.MapEvent(addResult.Unwrap());
         if (mappedResult.IsError)
         {
-            var err = Enum.GetName(mappedResult.Error!.Type)!;
-            return new ServiceResponse<EventDto>(err);
+            return mappedResult.Error!;
         }
 
         return new ServiceResponse<EventDto>(mappedResult.Unwrap());
     }
 
-    public async Task<ServiceResponse<EventDto>> EditEvent(EditEventDto editEvent)
+    public async Task<Result<ServiceResponse<EventDto>>> EditEvent(EditEventDto editEvent)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -56,21 +55,19 @@ public class EventService(
         
         if (editResult.IsError)
         {
-            var err = Enum.GetName(editResult.Error!.Type)!;
-            return new ServiceResponse<EventDto>(err);
+            return editResult.Error!;
         }
 
         var mappedResult = EventMapper.MapEvent(editResult.Unwrap());
         if (mappedResult.IsError)
         {
-            var err = Enum.GetName(mappedResult.Error!.Type)!;
-            return new ServiceResponse<EventDto>(err);
+            return mappedResult.Error!;
         }
 
         return new ServiceResponse<EventDto>(mappedResult.Unwrap());
     }
 
-    public async Task<ServiceResponse<List<EventDto>>> GetEvents()
+    public async Task<Result<ServiceResponse<List<EventDto>>>> GetEvents()
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -83,8 +80,7 @@ public class EventService(
         
         if (eventsResult.IsError)
         {
-            var err = Enum.GetName(eventsResult.Error!.Type)!;
-            return new ServiceResponse<List<EventDto>>(err);
+            return eventsResult.Error!;
         }
 
         var mappedResults = eventsResult
@@ -92,9 +88,10 @@ public class EventService(
             .Select(EventMapper.MapEvent)
             .ToList();
 
-        if (mappedResults.Exists(mr => mr.IsError))
+        var error = mappedResults.FirstOrDefault(mr => mr.IsError);
+        if (error is not null)
         {
-            return new ServiceResponse<List<EventDto>>("map error");
+            return error.Error!;
         }
 
         var mapped = mappedResults
@@ -104,7 +101,7 @@ public class EventService(
         return new ServiceResponse<List<EventDto>>(mapped);
     }
 
-    public async Task<ServiceResponse> RemoveEvent(long eventId)
+    public async Task<Result<ServiceResponse>> RemoveEvent(long eventId)
     {
         var userResult = userContextAccessor.GetUserContext();
         if (userResult.IsError)
@@ -117,8 +114,7 @@ public class EventService(
 
         if (deleteResult.IsError)
         {
-            var err = Enum.GetName(deleteResult.Error!.Type)!;
-            return new ServiceResponse(err);
+            return deleteResult.Error!;
         }
 
         return new ServiceResponse();

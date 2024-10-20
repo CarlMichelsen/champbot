@@ -62,7 +62,7 @@
                 id={`reminder-timespan-${reminder.id}`}
                 label="New reminder timespan"
                 minutes={reminder.minutesBeforeEvent}
-                edited={async (min) => {
+                edited={async min => {
                     await editReminderMinutes(min)
                 }}/>
         </span>
