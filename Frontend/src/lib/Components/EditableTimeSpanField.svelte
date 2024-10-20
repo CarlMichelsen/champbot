@@ -1,27 +1,29 @@
 <script lang="ts">
-    type EditableTextFieldProps = {
+    import { Format } from "../../util/format";
+
+    type EditableTimeSpanFieldProps = {
         id: string;
         label: string;
-        text: string;
+        minutes: number;
         additionalClass?: string;
-        edited: (text: string) => void;
-    }
+        edited: (minute: number) => void;
+    };
 
+    let { id, label, edited, additionalClass, minutes }: EditableTimeSpanFieldProps = $props();
     let inputField = $state<HTMLInputElement|null>(null);
     let editing = $state<boolean>(false);
-    let { id, label, edited, additionalClass, text }: EditableTextFieldProps = $props();
 
     const fieldEdited = (e: Event & { currentTarget: EventTarget & HTMLInputElement; }) => {
         const elem = e.target as HTMLInputElement;
-        if (text !== elem.value) {
-            edited(elem.value);
+        if (minutes !== Number(elem.value)) {
+            edited(Number(elem.value));
         }
     }
 
     const stopEditing = (e: { currentTarget: EventTarget & HTMLInputElement; }) => {
         const elem = e.currentTarget as HTMLInputElement;
-        if (text !== elem.value) {
-            edited(elem.value);
+        if (minutes !== Number(elem.value)) {
+            edited(Number(elem.value));
         }
         editing = false;
     }
@@ -41,22 +43,21 @@
         type="text"
         name="text-edit"
         oninput={fieldEdited}
-        onkeydown={(e) => {
+        onkeydown={e => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 stopEditing(e);
             }
         }}
         onblur={stopEditing}
-        value={text}>
+        value={minutes}>
 {:else}
     <button
-        id={id}
         class="text-left p-1"
         onclick={() => startEditing()}>
         <span class="inline-block text-xs w-4">🖊</span>
         <p class={`${additionalClass ?? ""} inline-block`}>
-            {text}
+            {Format.minutesToTimeString(minutes)} before event
         </p>
     </button>
 {/if}

@@ -1,5 +1,5 @@
 export type CreateReminderDto = {
-    eventId: string;
+    eventId: number;
     reminderNote?: string;
     minutesBeforeEvent: number;
 }

@@ -1,27 +1,20 @@
 <script lang="ts">
-    import type { EventDto } from "../../model/event/eventDto";
     import { getEventStore } from "../../store/eventStore.svelte";
+    import CreateEventCard from "./CreateEventCard.svelte";
     import EventCard from "./EventCard.svelte";
+
     const eventStore = getEventStore();
-
-    const deletedEvent = (event: EventDto) => {
-        eventStore.deleteEvent(event);
-    }
-
-    const editedEvent = (event: EventDto) => {
-        eventStore.editEvent(event);
-    }
 </script>
 
-<h1 class="text-lg">Events</h1>
-
-<br>
-
-<div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-x-10 gap-y-20">
+<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-x-10 gap-y-20">
+    <CreateEventCard />
     {#each eventStore.events as e}
         <EventCard
             event={e}
-            deletedEvent={deletedEvent}
-            editedEvent={editedEvent}/>
+            deletedEvent={e => eventStore.deleteEvent(e)}
+            editedEvent={e => eventStore.editEvent(e)}
+            deletedReminder={r => eventStore.deleteReminder(r)}
+            editedReminder={r => eventStore.editReminder(r)}
+            addedReminder={r => eventStore.addReminder(r)} />
     {/each}
 </div>
