@@ -9,13 +9,13 @@ public static class DiscordSocketConfigFactory
     {
         GatewayIntents =
             GatewayIntents.AllUnprivileged
+            | GatewayIntents.Guilds
+            | GatewayIntents.GuildMembers
+            | GatewayIntents.GuildMessages
+            | GatewayIntents.GuildPresences
+            | GatewayIntents.GuildMessageReactions
             | GatewayIntents.MessageContent
             | GatewayIntents.DirectMessages
-            | GatewayIntents.GuildMembers
-            | GatewayIntents.DirectMessages
-            | GatewayIntents.DirectMessages
-            | GatewayIntents.DirectMessageReactions
-            | GatewayIntents.GuildMessages
-            | GatewayIntents.GuildMessageReactions,
+            | GatewayIntents.DirectMessageReactions,
     };
 }
