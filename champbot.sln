@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Frontend", "Frontend\Frontend.csproj", "{6D5FCED5-8FCD-4014-8783-0F5840FEE0FB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiscordBot", "DiscordBot\DiscordBot.csproj", "{FA870E0E-51CA-4AA3-A659-D342D8C7E820}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -54,5 +56,9 @@ Global
 		{6D5FCED5-8FCD-4014-8783-0F5840FEE0FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D5FCED5-8FCD-4014-8783-0F5840FEE0FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D5FCED5-8FCD-4014-8783-0F5840FEE0FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA870E0E-51CA-4AA3-A659-D342D8C7E820}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA870E0E-51CA-4AA3-A659-D342D8C7E820}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA870E0E-51CA-4AA3-A659-D342D8C7E820}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA870E0E-51CA-4AA3-A659-D342D8C7E820}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -8,6 +8,7 @@
   import Events from "./lib/Pages/Events.svelte";
     import { UserAccessor } from "./util/userAccessor";
     import { initiateEventStore } from "./store/eventStore.svelte";
+    import Discord from "./lib/Pages/Discord.svelte";
 
   type AppProps = {
     url: string;
@@ -52,6 +53,11 @@
       <Route path="/events">
         <Events />
       </Route>
+      
+      <Route path="/discord">
+        <Discord />
+      </Route>
+      
 
       <Route path="/account">
         <Account />

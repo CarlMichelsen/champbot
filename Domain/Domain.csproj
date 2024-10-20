@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Database\Database.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Discord.Net" Version="3.16.0" />
+  </ItemGroup>
+
 </Project>

@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Implementation\Implementation.csproj" />
     <ProjectReference Include="..\Interface\Interface.csproj" />
+    <ProjectReference Include="..\DiscordBot\DiscordBot.csproj" />
   </ItemGroup>
 
 </Project>

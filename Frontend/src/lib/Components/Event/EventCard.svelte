@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { EditEventDto } from "../../model/event/editEventDto";
-    import type { EventDto } from "../../model/event/eventDto";
-    import type { ReminderDto } from "../../model/event/reminderDto";
-    import { EventClient } from "../../util/clients/eventClient";
-    import { ReminderClient } from "../../util/clients/reminderClient";
-    import EditableDateTimeField from "./EditableDateTimeField.svelte";
-    import EditableTextField from "./EditableTextField.svelte";
-    import EditableTimeSpanField from "./EditableTimeSpanField.svelte";
+    import type { EditEventDto } from "../../../model/event/editEventDto";
+    import type { EventDto } from "../../../model/event/eventDto";
+    import type { ReminderDto } from "../../../model/event/reminderDto";
+    import { EventClient } from "../../../util/clients/eventClient";
+    import { ReminderClient } from "../../../util/clients/reminderClient";
+    import EditableDateTimeField from "../EditableDateTimeField.svelte";
+    import EditableTextField from "../EditableTextField.svelte";
+    import EditableTimeSpanField from "../EditableTimeSpanField.svelte";
     import ReminderCard from "./ReminderCard.svelte";
 
     const client = new EventClient();

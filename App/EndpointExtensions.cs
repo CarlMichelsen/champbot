@@ -15,5 +15,7 @@ public static class EndpointExtensions
         apiGroup.RegisterEventEndpoints();
 
         apiGroup.RegisterReminderEndpoints();
+
+        apiGroup.RegisterDiscordEndpoints();
     }
 }

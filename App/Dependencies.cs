@@ -1,5 +1,8 @@
 using App.Middleware;
 using Database;
+using DiscordBot.Accessor;
+using DiscordBot.Configuration;
+using DiscordBot.Service;
 using Domain.Configuration;
 using Domain.Configuration.Options;
 using Implementation.Accessor;
@@ -27,6 +30,9 @@ public static class Dependencies
             "secrets.json",
             optional: builder.Environment.IsDevelopment(),
             reloadOnChange: true);
+        
+        builder.Services
+            .Configure<DiscordBotOptions>(builder.Configuration.GetSection(DiscordBotOptions.SectionName));
 
         // Cache
         builder.Services
@@ -35,24 +41,31 @@ public static class Dependencies
 
         // Accessor
         builder.Services
+            .AddSingleton<IDiscordSocketClientAccessor, DiscordSocketClientAccessor>()
             .AddScoped<IUserContextAccessor, UserContextAccessor>();
         
         // Handler
         builder.Services
             .AddScoped<IEventHandler, Implementation.Handler.EventHandler>()
-            .AddScoped<IReminderHandler, ReminderHandler>();
+            .AddScoped<IReminderHandler, ReminderHandler>()
+            .AddScoped<IDiscordBotHandler, DiscordBotHandler>();
 
         // Service
         builder.Services
             .AddScoped<IResultErrorLogService, ResultErrorLogService>()
             .AddScoped<IUserDataService, UserDataService>()
             .AddScoped<IEventService, EventService>()
-            .AddScoped<IReminderService, ReminderService>();
+            .AddScoped<IReminderService, ReminderService>()
+            .AddScoped<IDiscordBotService, DiscordBotService>();
 
         // Repository
         builder.Services
             .AddScoped<IEventRepository, EventRepository>()
             .AddScoped<IReminderRepository, ReminderRepository>();
+
+        // BackgroundService
+        builder.Services
+            .AddHostedService<DiscordBotBackgroundService>();
 
         // Http
         builder.Services

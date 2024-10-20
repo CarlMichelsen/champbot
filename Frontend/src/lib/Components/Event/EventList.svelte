@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { getEventStore } from "../../store/eventStore.svelte";
+    import { getEventStore } from "../../../store/eventStore.svelte";
     import CreateEventCard from "./CreateEventCard.svelte";
     import EventCard from "./EventCard.svelte";
 

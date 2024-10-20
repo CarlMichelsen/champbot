@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { EventDto } from "../../model/event/eventDto";
-    import type { ReminderDto } from "../../model/event/reminderDto";
-    import { ReminderClient } from "../../util/clients/reminderClient";
-    import { Format } from "../../util/format";
-    import EditableTimeSpanField from "./EditableTimeSpanField.svelte";
+    import type { EventDto } from "../../../model/event/eventDto";
+    import type { ReminderDto } from "../../../model/event/reminderDto";
+    import { ReminderClient } from "../../../util/clients/reminderClient";
+    import { Format } from "../../../util/format";
+    import EditableTimeSpanField from "../EditableTimeSpanField.svelte";
 
     type ReminderCardProps = {
         event: EventDto;

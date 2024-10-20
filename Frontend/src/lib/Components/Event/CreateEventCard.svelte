@@ -1,9 +1,9 @@
 <script lang="ts">
-    import { getEventStore } from "../../store/eventStore.svelte";
-    import { EventClient } from "../../util/clients/eventClient";
-    import { isValidDate } from "../../util/dateUtil";
-    import EditableDateTimeField from "./EditableDateTimeField.svelte";
-    import EditableTextField from "./EditableTextField.svelte";
+    import { getEventStore } from "../../../store/eventStore.svelte";
+    import { EventClient } from "../../../util/clients/eventClient";
+    import { isValidDate } from "../../../util/dateUtil";
+    import EditableDateTimeField from "../EditableDateTimeField.svelte";
+    import EditableTextField from "../EditableTextField.svelte";
 
     let touched = $state<boolean>(false);
     let title = $state<string>("Event Title");

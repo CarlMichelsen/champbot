@@ -2,7 +2,7 @@
     import { getEventStore } from "../../store/eventStore.svelte";
     import { getUserStore } from "../../store/userStore.svelte";
     import { EventClient } from "../../util/clients/eventClient";
-    import EventList from "../Components/EventList.svelte";
+    import EventList from "../Components/Event/EventList.svelte";
 
     const eventClient = new EventClient();
     const userStore = getUserStore();
