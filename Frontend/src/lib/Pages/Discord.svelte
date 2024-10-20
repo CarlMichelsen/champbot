@@ -106,7 +106,7 @@
             name="message-area"
             id="message-area"
             onkeydown={async (e) => {
-                if (e.key === 'Enter') {
+                if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
                     await sendMessage();
                 }
