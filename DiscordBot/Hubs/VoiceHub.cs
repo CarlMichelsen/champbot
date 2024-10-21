@@ -81,9 +81,9 @@ public class VoiceHub(
                 vc.AudioClient = audioClient;
             }
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw;
+            logger.LogCritical(e, "ConnectToVoice Hub method threw an exception");
         }
     }
 
@@ -94,9 +94,9 @@ public class VoiceHub(
             var guildId = ulong.Parse(guildIdString);
             await this.LeaveAllVoiceChannelsInGuild(guildId);
         }
-        catch (System.Exception)
+        catch (System.Exception e)
         {
-            throw;
+            logger.LogCritical(e, "LeaveGuildVoice Hub method threw an exception");
         }
     }
 
