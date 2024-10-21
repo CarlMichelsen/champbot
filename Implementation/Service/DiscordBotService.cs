@@ -3,8 +3,10 @@ using Discord.WebSocket;
 using Domain.Abstraction;
 using Domain.Dto;
 using Domain.Dto.Discord;
+using Implementation.Util;
 using Interface.Accessor;
 using Interface.Service;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Implementation.Service;
@@ -12,20 +14,27 @@ namespace Implementation.Service;
 public class DiscordBotService(
     ILogger<DiscordBotService> logger,
     IUserContextAccessor userContext,
-    IDiscordSocketClientAccessor clientAccessor) : IDiscordBotService
+    IDiscordBotAccessor botAccessor) : IDiscordBotService
 {
-    public Result<ServiceResponse<List<DiscordGuildDto>>> GetActiveGuilds()
+    public Result<ServiceResponse<List<DiscordGuildDto>>> GetActiveGuilds(
+        HttpContext? httpContext = default)
     {
         try
         {
             var guildDtos = new List<DiscordGuildDto>();
-            var activeGuilds = clientAccessor.Client.Guilds.ToList();
+            var activeGuilds = botAccessor.Bot.Socket.Guilds.ToList();
             foreach (var guild in activeGuilds)
             {
-                var channels = guild.TextChannels
+                var voiceChannels = guild.VoiceChannels
+                    .Where(tc => tc.GetChannelType() == ChannelType.Voice)
+                    .OrderBy(tc => $"{tc.Category} {tc.Name}")
+                    .Select(DiscordGuildMapper.Map)
+                    .ToList();
+
+                var textChannels = guild.TextChannels
                     .Where(tc => tc.GetChannelType() == ChannelType.Text)
                     .OrderBy(tc => $"{tc.Category} {tc.Name}")
-                    .Select(Map)
+                    .Select(DiscordGuildMapper.Map)
                     .ToList();
 
                 var guildDto = new DiscordGuildDto(
@@ -33,8 +42,9 @@ public class DiscordBotService(
                     GuildCreatorId: guild.OwnerId.ToString(),
                     GuildName: guild.Name,
                     GuildIconUrl: guild.IconUrl,
-                    Members: guild.Users.OrderBy(u => u.Username).Select(Map).ToList(),
-                    TextChannels: channels);
+                    Members: guild.Users.OrderBy(u => u.Username).Select(DiscordGuildMapper.Map).ToList(),
+                    VoiceChannels: voiceChannels,
+                    TextChannels: textChannels);
                 
                 guildDtos.Add(guildDto);
             }
@@ -50,7 +60,9 @@ public class DiscordBotService(
         }
     }
 
-    public async Task<Result<ServiceResponse>> SendMessage(SendDiscordMessageDto sendDiscordMessage)
+    public async Task<Result<ServiceResponse>> SendMessage(
+        SendDiscordMessageDto sendDiscordMessage,
+        HttpContext? httpContext = default)
     {
         var userContextResult = userContext.GetUserContext();
         if (userContextResult.IsError)
@@ -61,14 +73,14 @@ public class DiscordBotService(
         try
         {
             var user = userContextResult.Unwrap().User;
-            var guild = clientAccessor.Client.Guilds
+            var guild = botAccessor.Bot.Socket.Guilds
                 .FirstOrDefault(g => g.Id == ulong.Parse(sendDiscordMessage.GuildId));
             if (guild is null)
             {
                 return new ServiceResponse("Guild not found");
             }
 
-            var channel = await clientAccessor.Client
+            var channel = await botAccessor.Bot.Socket
                 .GetChannelAsync(ulong.Parse(sendDiscordMessage.TextChannelId));
             if (channel is null)
             {
@@ -98,22 +110,5 @@ public class DiscordBotService(
                 "Failed to send message",
                 e);
         }
-    }
-
-    private static DiscordTextChannelDto Map(SocketTextChannel socketTextChannel)
-    {
-        return new DiscordTextChannelDto(
-            TextChannelId: socketTextChannel.Id.ToString(),
-            ChannelName: socketTextChannel.Name,
-            Category: string.IsNullOrWhiteSpace(socketTextChannel.Category.Name) ? null : socketTextChannel.Category.Name,
-            Members: socketTextChannel.Users.OrderBy(u => u.Username).Select(Map).ToList());
-    }
-
-    private static DiscordUserDto Map(SocketGuildUser guildUser)
-    {
-        return new DiscordUserDto(
-            UserId: guildUser.Id.ToString(),
-            Username: guildUser.Username,
-            UserAvatarUrl: guildUser.GetAvatarUrl());
     }
 }

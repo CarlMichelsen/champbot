@@ -41,7 +41,7 @@ public static class Dependencies
 
         // Accessor
         builder.Services
-            .AddSingleton<IDiscordSocketClientAccessor, DiscordSocketClientAccessor>()
+            .AddSingleton<IDiscordBotAccessor, DiscordBotAccessor>()
             .AddScoped<IUserContextAccessor, UserContextAccessor>();
         
         // Handler
@@ -71,6 +71,10 @@ public static class Dependencies
         builder.Services
             .AddHttpContextAccessor()
             .AddScoped<UnhandledExceptionMiddleware>();
+        
+        // SignalR
+        builder.Services
+            .AddSignalR();
 
         // Configure Serilog from "appsettings.(env).json
         Log.Logger = new LoggerConfiguration()

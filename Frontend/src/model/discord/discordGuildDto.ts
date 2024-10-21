@@ -1,4 +1,4 @@
-import type { DiscordTextChannelDto } from "./discordTextChannelDto";
+import type { DiscordChannelDto } from "./discordChannelDto";
 import type { DiscordUserDto } from "./discordUserDto";
 
 export type DiscordGuildDto = {
@@ -7,5 +7,6 @@ export type DiscordGuildDto = {
     guildName: string;
     guildIconUrl?: string;
     members: DiscordUserDto[];
-    textChannels: DiscordTextChannelDto[];
+    voiceChannels: DiscordChannelDto[];
+    textChannels: DiscordChannelDto[];
 }

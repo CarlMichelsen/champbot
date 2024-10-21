@@ -19,9 +19,9 @@
         {#if userStore.state === "loggedIn"}
         <nav class="pt-2.5 space-x-8">
             <a class="hover:underline" use:link href="/">Home</a>
-            <a class="hover:underline" use:link href="events">Events</a>
-            <a class="hover:underline" use:link href="discord">Discord</a>
-            <a class="hover:underline" use:link href="account">Account</a>
+            <a class="hover:underline" use:link href="/events">Events</a>
+            <a class="hover:underline" use:link href="/discord">Discord</a>
+            <a class="hover:underline" use:link href="/account">Account</a>
         </nav>
 
         <div class="grid grid-cols-[auto_3rem]">

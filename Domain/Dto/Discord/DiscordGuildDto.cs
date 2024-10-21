@@ -6,4 +6,5 @@ public record DiscordGuildDto(
     string GuildName,
     string? GuildIconUrl,
     List<DiscordUserDto> Members,
-    List<DiscordTextChannelDto> TextChannels);
+    List<DiscordChannelDto> VoiceChannels,
+    List<DiscordChannelDto> TextChannels);

@@ -6,9 +6,12 @@
   import Account from "./lib/Pages/Account.svelte";
   import LoggedOut from "./lib/Pages/LoggedOut.svelte";
   import Events from "./lib/Pages/Events.svelte";
-    import { UserAccessor } from "./util/userAccessor";
-    import { initiateEventStore } from "./store/eventStore.svelte";
-    import Discord from "./lib/Pages/Discord.svelte";
+  import { UserAccessor } from "./util/userAccessor";
+  import { initiateEventStore } from "./store/eventStore.svelte";
+  import DiscordMessage from "./lib/Pages/DiscordMessage.svelte";
+  import DiscordVoice from "./lib/Pages/DiscordVoice.svelte";
+  import Discord from "./lib/Pages/Discord.svelte";
+    import { initiateVoiceStore } from "./store/voiceStore.svelte";
 
   type AppProps = {
     url: string;
@@ -18,6 +21,7 @@
 
   initiateUserStore();
   initiateEventStore();
+  initiateVoiceStore();
 
   const userStore = getUserStore();
 
@@ -53,9 +57,17 @@
       <Route path="/events">
         <Events />
       </Route>
-      
+
       <Route path="/discord">
         <Discord />
+      </Route>
+      
+      <Route path="/discord/message">
+        <DiscordMessage />
+      </Route>
+
+      <Route path="/discord/voice">
+        <DiscordVoice />
       </Route>
       
 

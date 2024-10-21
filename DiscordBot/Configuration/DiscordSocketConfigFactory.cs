@@ -7,6 +7,6 @@ public static class DiscordSocketConfigFactory
 {
     public static DiscordSocketConfig GetConfig() => new()
     {
-        GatewayIntents = GatewayIntents.Guilds,
+        GatewayIntents = GatewayIntents.Guilds | GatewayIntents.GuildVoiceStates,
     };
 }

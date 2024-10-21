@@ -27,3 +27,31 @@ dotnet ef migrations add ChampbotInitialCreate --project App
 ```bash
 dotnet ef database update --project App
 ```
+
+## Audio troubleshooting
+
+install opus and deps
+```bash
+sudo apt-get update && apt-get install -y \
+    libopus0 \
+    libopus-dev \
+    && rm -rf /var/lib/apt/lists/*
+```
+
+if it still does not work:
+
+check installation
+```bash
+find /usr/lib /usr/lib/x86_64-linux-gnu -name "libopus.so*"
+```
+
+if all files end in ".0" run:
+```bash
+sudo ln -s /usr/lib/x86_64-linux-gnu/libopus.so.0 /usr/lib/x86_64-linux-gnu/libopus.so
+```
+and
+```bash
+sudo ldconfig
+```
+
+Should work now.

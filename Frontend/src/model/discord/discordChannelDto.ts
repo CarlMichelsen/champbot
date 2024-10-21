@@ -1,7 +1,8 @@
 import type { DiscordUserDto } from "./discordUserDto";
 
-export type DiscordTextChannelDto = {
-    textChannelId: string;
+export type DiscordChannelDto = {
+    guildId: string;
+    channelId: string;
     category?: string;
     channelName: string;
     members: DiscordUserDto[];

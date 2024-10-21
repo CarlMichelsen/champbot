@@ -1,105 +1,23 @@
-using System.Text.Json;
 using Domain.Abstraction;
 using Domain.User;
-using Implementation.Util;
 using Interface.Accessor;
 using Microsoft.AspNetCore.Http;
 
 namespace Implementation.Accessor;
 
-public class UserContextAccessor(IHttpContextAccessor httpContextAccessor) : IUserContextAccessor
+public class UserContextAccessor(
+    IHttpContextAccessor httpContextAccessor) : IUserContextAccessor
 {
-    public Result<UserContext> GetUserContext()
+    public Result<UserContext> GetUserContext(HttpContext? httpContext = default)
     {
-        try
-        {
-            if (httpContextAccessor.HttpContext is null)
-            {
-                return new ResultError(
-                    ErrorType.MapError,
-                    "No http-context found when getting user");
-            }
-            
-            if (httpContextAccessor.HttpContext.User.Identity?.IsAuthenticated != true)
-            {
-                return new ResultError(
-                    ErrorType.Unauthorized,
-                    "Not authorized when accessing user");
-            }
-
-            var userJsonClaimResult = GetClaim(httpContextAccessor.HttpContext, JwtMapper.UserClaim);
-            if (userJsonClaimResult.IsError)
-            {
-                return userJsonClaimResult.Error!;
-            }
-
-            var user = JsonSerializer.Deserialize<AuthenticatedUser>(userJsonClaimResult.Unwrap());
-            if (user is null)
-            {
-                return new ResultError(
-                    ErrorType.MapError,
-                    "User json resulted in a null object");
-            }
-            
-            var accessIdClaimResult = GetClaim(httpContextAccessor.HttpContext, JwtMapper.AccessIdClaim);
-            if (accessIdClaimResult.IsError)
-            {
-                return accessIdClaimResult.Error!;
-            }
-
-            if (!long.TryParse(accessIdClaimResult.Unwrap(), out var accessId))
-            {
-                return new ResultError(ErrorType.MapError, "Failed to map claim to long (accessId)");
-            }
-            
-            var refreshIdClaimResult = GetClaim(httpContextAccessor.HttpContext, JwtMapper.RefreshIdClaim);
-            if (refreshIdClaimResult.IsError)
-            {
-                return refreshIdClaimResult.Error!;
-            }
-            
-            if (!long.TryParse(refreshIdClaimResult.Unwrap(), out var refreshId))
-            {
-                return new ResultError(ErrorType.MapError, "Failed to map claim to long (refreshId)");
-            }
-            
-            var loginIdClaimResult = GetClaim(httpContextAccessor.HttpContext, JwtMapper.LoginIdClaim);
-            if (loginIdClaimResult.IsError)
-            {
-                return loginIdClaimResult.Error!;
-            }
-            
-            if (!long.TryParse(loginIdClaimResult.Unwrap(), out var loginId))
-            {
-                return new ResultError(ErrorType.MapError, "Failed to map claim to long (loginId)");
-            }
-
-            return new UserContext(
-                LoginId: loginId,
-                RefreshId: refreshId,
-                AccessId: accessId,
-                User: user);
-        }
-        catch (Exception e)
+        var context = httpContextAccessor.HttpContext ?? httpContext;
+        if (context is null)
         {
             return new ResultError(
-                ErrorType.Exception,
-                "Getting user from http-context resulted in an exception",
-                e);
+                ErrorType.MapError,
+                "No http-context found when getting user");
         }
-    }
-
-    private static Result<string> GetClaim(HttpContext httpContext, string claimType)
-    {
-        var claim = httpContext.User.Claims
-            .FirstOrDefault(c => c.Type == claimType)?.Value;
-        if (string.IsNullOrWhiteSpace(claim))
-        {
-            return new ResultError(
-                ErrorType.NotFound,
-                $"Did not find \"{claimType}\" claim type");
-        }
-
-        return claim;
+        
+        return UserContextManager.GetUserContext(context);
     }
 }

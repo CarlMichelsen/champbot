@@ -34,4 +34,9 @@ WORKDIR /app
 
 COPY --from=publish /app/publish .
 
+# Install Opus library and FFmpeg using apt-get (this is required for audio streaming)
+RUN apt-get update && apt-get install -y \
+    libopus-dev \
+    && rm -rf /var/lib/apt/lists/*
+
 ENTRYPOINT ["dotnet", "./App.dll"]

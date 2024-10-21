@@ -1,4 +1,5 @@
 using App.Endpoints;
+using DiscordBot.Hubs;
 
 namespace App;
 
@@ -17,5 +18,7 @@ public static class EndpointExtensions
         apiGroup.RegisterReminderEndpoints();
 
         apiGroup.RegisterDiscordEndpoints();
+
+        apiGroup.MapHub<VoiceHub>("voice");
     }
 }
