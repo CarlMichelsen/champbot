@@ -15,7 +15,7 @@
     }
 
     const connectedToChannel = (channelId: string): boolean => {
-        return !!voiceStore.voiceChannels.find(c => c.channelId);
+        return !!voiceStore.voiceChannels.find(c => c.channelId === channelId);
     }
 </script>
 
