@@ -1,7 +1,7 @@
-﻿using System.Globalization;
-using Discord.Interactions;
+﻿namespace Application.DiscordBot.Commands;
 
-namespace Application.DiscordBot.Commands;
+using System.Globalization;
+using Discord.Interactions;
 
 public class WeekNumberModule(
     TimeProvider timeProvider) : InteractionModuleBase<SocketInteractionContext>
@@ -9,8 +9,11 @@ public class WeekNumberModule(
     [SlashCommand("week", "Current week number")]
     public async Task GetWeekNumber()
     {
-        var weekNumber = ISOWeek.GetWeekOfYear(timeProvider.GetUtcNow().DateTime);
-        var response = $"Current week: {weekNumber}";
-        await this.RespondAsync(response, ephemeral: true);
+        var culture = CultureInfo.InvariantCulture;
+        var weekNumber = culture.Calendar.GetWeekOfYear(
+            timeProvider.GetUtcNow().DateTime,
+            culture.DateTimeFormat.CalendarWeekRule,
+            culture.DateTimeFormat.FirstDayOfWeek);
+        await this.RespondAsync($"Current week: {weekNumber}", ephemeral: true);
     }
 }
