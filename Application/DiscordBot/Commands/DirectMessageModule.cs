@@ -19,7 +19,7 @@ public class DirectMessageModule : InteractionModuleBase<SocketInteractionContex
             await dmChannel.SendMessageAsync(
                 message,
                 embed: new EmbedBuilder()
-                    .AddField("Was instructed to send this message by", $"<@{sender.Id}>")
+                    .AddField("Was instructed to send this message by", $"<@{sender.Id}> ({sender.Username})")
                     .Build());
             await this.RespondAsync($"DM sent to {targetUser.Username}", ephemeral: true);
         }
