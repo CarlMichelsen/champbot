@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Endpoints;
 
@@ -11,10 +10,7 @@ public static class RootEndpoints
         
         var apiGroup = endpoints.MapGroup("api/v1");
         
-        apiGroup.MapGet("/exception", ([FromServices] ILogger<Program> logger) =>
-        {
-            return "Hello World!";
-        });
+        apiGroup.MapGet("/", ([FromServices] ILogger<Program> logger) => "Hello World!");
 
         return endpoints;
     }

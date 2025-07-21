@@ -5,14 +5,8 @@ namespace Application.DiscordBot.Commands;
 
 public class TestModule : InteractionModuleBase<SocketInteractionContext>
 {
-    [SlashCommand("echo", "Echo a message")]
-    public async Task EchoAsync(
-        [Summary("message", "The message to echo")] string message,
-        [Summary("ephemeral", "Only visible to you")] bool ephemeral = false)
-        => await this.RespondAsync(message, ephemeral: ephemeral);
-
     [SlashCommand("userinfo", "Get user information")]
-    public async Task UserInfoAsync([Summary("user", "Target user")] IUser? user = null)
+    public async Task UserInfo([Summary("user", "Target user")] IUser? user = null)
     {
         user ??= this.Context.User;
         var embed = new EmbedBuilder()
@@ -22,6 +16,6 @@ public class TestModule : InteractionModuleBase<SocketInteractionContext>
             .WithColor(Color.Blue)
             .Build();
         
-        await this.RespondAsync(embed: embed);
+        await this.RespondAsync(embed: embed, ephemeral: true);
     }
 }

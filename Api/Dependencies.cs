@@ -13,7 +13,8 @@ public static class Dependencies
         // Configuration
         builder.Services
             .AddOpenApi()
-            .AddConfiguredOpenTelemetry();
+            .AddConfiguredOpenTelemetry()
+            .AddSingleton(TimeProvider.System);
         builder.Configuration.AddJsonFile(
             "secrets.json",
             optional: builder.Environment.IsDevelopment(),
@@ -27,6 +28,10 @@ public static class Dependencies
         builder.Services
             .AddHttpContextAccessor()
             .AddCustomProblemDetails();
+        
+        // Discord Bot
+        builder
+            .AddDiscordBot();
         
         // HealthChecks
         builder.Services
