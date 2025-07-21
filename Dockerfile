@@ -1,15 +1,14 @@
 ARG PROJECT_NAME=Api
 
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.0-preview.6-alpine3.22 AS base
 WORKDIR /app
 EXPOSE 8080
 
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview-alpine AS build
 ARG PROJECT_NAME
 WORKDIR /src
-COPY ["${PROJECT_NAME}/${PROJECT_NAME}.csproj", "${PROJECT_NAME}/"]
-RUN dotnet restore "${PROJECT_NAME}/${PROJECT_NAME}.csproj"
 COPY . .
+RUN dotnet restore "${PROJECT_NAME}/${PROJECT_NAME}.csproj"
 WORKDIR "/src/${PROJECT_NAME}"
 RUN dotnet build "${PROJECT_NAME}.csproj" -c Release -o /app/build
 
