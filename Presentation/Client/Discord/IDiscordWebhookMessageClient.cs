@@ -1,6 +1,6 @@
 ﻿namespace Presentation.Client.Discord;
 
-public interface IDiscordWebhookClient
+public interface IDiscordWebhookMessageClient
 {
     Task SendMessageAsync(
         WebhookMessage message,

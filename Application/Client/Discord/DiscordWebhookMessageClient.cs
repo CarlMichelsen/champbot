@@ -5,16 +5,16 @@ using Presentation.Client.Discord;
 
 namespace Application.Client.Discord;
 
-public class DiscordWebhookClient(
+public class DiscordWebhookMessageClient(
     HttpClient httpClient,
-    IOptions<ChampBotOptions> options) : IDiscordWebhookClient
+    IOptions<ApplicationOptions> options) : IDiscordWebhookMessageClient
 {
     public async Task SendMessageAsync(
         WebhookMessage message,
         CancellationToken cancellationToken = default)
     {
         var response = await httpClient.PostAsJsonAsync(
-            options.Value.Discord.WebhookUrl,
+            options.Value.DiscordWebhookWebhook.Url,
             message,
             cancellationToken);
         response.EnsureSuccessStatusCode();

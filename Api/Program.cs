@@ -7,6 +7,10 @@ var builder = WebApplication.CreateBuilder(args);
 // Dependencies
 builder.RegisterChampBotDependencies();
 
+// Discord Bot
+builder
+    .AddDiscordBot();
+
 var app = builder.Build();
 
 // OpenApi and Scalar endpoints - only enabled in development mode

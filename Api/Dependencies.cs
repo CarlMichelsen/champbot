@@ -18,7 +18,9 @@ public static class Dependencies
             "secrets.json",
             optional: builder.Environment.IsDevelopment(),
             reloadOnChange: false);
-        builder.AddValidatedOptions<ChampBotOptions>();
+        builder
+            .AddValidatedOptions<ApplicationOptions>()
+            .AddValidatedOptions<DiscordBotOptions>();
         builder.ApplicationUseSerilog();
         
         // Middleware
@@ -38,7 +40,7 @@ public static class Dependencies
         
         // Client
         builder.Services
-            .AddHttpClient<IDiscordWebhookClient, DiscordWebhookClient>()
+            .AddHttpClient<IDiscordWebhookMessageClient, DiscordWebhookMessageClient>()
             .AddStandardResilienceHandler();
     }
 }

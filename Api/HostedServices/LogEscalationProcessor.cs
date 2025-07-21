@@ -8,7 +8,7 @@ namespace Api.HostedServices;
 
 public class LogEscalationProcessor(
     Channel<LogEvent> channel,
-    IDiscordWebhookClient discordWebhookClient) : BackgroundService
+    IDiscordWebhookMessageClient discordWebhookMessageClient) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
@@ -17,7 +17,7 @@ public class LogEscalationProcessor(
             try
             {
                 var logEvent = await channel.Reader.ReadAsync(stoppingToken);
-                await discordWebhookClient.SendMessageAsync(
+                await discordWebhookMessageClient.SendMessageAsync(
                     CreateWebhookMessage(logEvent),
                     stoppingToken);
             }
