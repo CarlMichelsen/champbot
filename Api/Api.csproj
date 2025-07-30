@@ -13,17 +13,24 @@
     <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
 
-    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
+    <!-- Logging -->
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
-    <PackageReference Include="Serilog.Enrichers.OpenTelemetry" Version="1.0.1" />
     <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.5.6" />
+    <PackageReference Include="Serilog.Enrichers.OpenTelemetry" Version="1.0.1" />
+
+    <!-- Database -->
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.0-preview.5.25277.114">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+
+    <!-- Scalar/OpenApi -->
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0-preview.4.25258.110" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.5.6" />
+
+    <!-- Resilience -->
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.7.0" />
   </ItemGroup>
 
   <ItemGroup>

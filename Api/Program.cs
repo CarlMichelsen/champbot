@@ -9,6 +9,12 @@ builder.RegisterChampBotDependencies();
 
 var app = builder.Build();
 
+if (app.Environment.IsProduction())
+{
+    // "Yeah, I'm gonna need you to be more groovy than that"
+    await app.Services.EnsureLatestDatabaseMigration();
+}
+
 // OpenApi and Scalar endpoints - only enabled in development mode
 app.MapOpenApiAndScalarForDevelopment();
 
