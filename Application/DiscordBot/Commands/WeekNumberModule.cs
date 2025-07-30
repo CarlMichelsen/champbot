@@ -9,11 +9,8 @@ public class WeekNumberModule(
     [SlashCommand("week", "Current week number")]
     public async Task GetWeekNumber()
     {
-        var culture = CultureInfo.InvariantCulture;
-        var weekNumber = culture.Calendar.GetWeekOfYear(
-            timeProvider.GetUtcNow().DateTime,
-            culture.DateTimeFormat.CalendarWeekRule,
-            culture.DateTimeFormat.FirstDayOfWeek);
-        await this.RespondAsync($"Current week: {weekNumber}", ephemeral: true);
+        var calendar = CultureInfo.InvariantCulture.Calendar;
+        var currentWeek = calendar.GetWeekOfYear(timeProvider.GetUtcNow().DateTime, CalendarWeekRule.FirstDay, DayOfWeek.Monday);
+        await this.RespondAsync($"Current week: {currentWeek}", ephemeral: true);
     }
 }
